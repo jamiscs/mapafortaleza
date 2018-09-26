@@ -12,11 +12,11 @@ body {
         position: absolute;
       }
 
-.container-fluid,.span12.map-hack,
-.row-fluid.map-hack,.content { height: inherit; }
+.container,.col-md-12.map-hack,
+.row.map-hack,.content { height: inherit; }
 
-.container-fluid,.span12.map-hack,
-.row-fluid.map-hack,.sidebar { height:inherit; }
+.container,.col-md-12.map-hack,
+.row.map-hack,.sidebar { height:inherit; }
 
 div.lineListSidebar {
   height:55%;
@@ -60,7 +60,7 @@ Enable overflow: auto on elements with overthrow class when html element has ove
     -webkit-overflow-scrolling: touch;
 }
 
-.nav-bar-right {
+  .ml-auto {
   padding-right: 0;
   padding-left: 0;
   margin-left: 20px;
@@ -82,7 +82,7 @@ Enable overflow: auto on elements with overthrow class when html element has ove
   position: relative;
   top: -90px;
 }
- 
+
 .lineListSidebar {
   margin-top: 30px;
 }
