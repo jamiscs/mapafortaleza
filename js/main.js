@@ -1,9 +1,9 @@
 var app={};
 
 app.params = {
-    urlFusionTable : "https://www.googleapis.com/fusiontables/v1/query",
-    idFusionTable: "1MpKDeZLwKJ5K9vIpWpBZFK88uG_BzQCXAO3UaMyS",
-    keyFusionTable: "AIzaSyC59BP_KRtQDLeb5XM_x0eQNT_tdlBbHZc"
+    urlFusionTable : "https://www.googleapis.com/fusiontables/v2/query",
+    idFusionTable: "15gmfcOYCIkxfmNLpW3lmjAObM5ScPRWx7PgTJscv",
+    keyFusionTable: "AIzaSyCEJGYR_GYh5qLaG0uvlZ12nxyGcfpgtik"
 }
 
 app.main = function() {
@@ -345,7 +345,7 @@ var LineList = Backbone.Model.extend({
         this.fetch();
     },
     url:function() {
-        return app.params.urlFusionTable+"?sql=SELECT name FROM "+app.params.idFusionTable+"&key="+app.params.keyFusionTable+"&callback=?";
+        return app.params.urlFusionTable+"?sql=SELECT name FROM "+app.params.idFusionTable+"&key="+app.params.keyFusionTable;
     },
     parse : function(response) {
         response.rows=_.flatten(response.rows);
