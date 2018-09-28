@@ -1,5 +1,11 @@
 var app={};
 
+app.params = {
+    urlFusionTable : "https://www.googleapis.com/fusiontables/v2/query",
+    idFusionTable: "15gmfcOYCIkxfmNLpW3lmjAObM5ScPRWx7PgTJscv",
+    keyFusionTable: "AIzaSyCEJGYR_GYh5qLaG0uvlZ12nxyGcfpgtik"
+}
+
 app.main = function() {
 
     var Map = Backbone.Model.extend({
@@ -42,8 +48,44 @@ app.main = function() {
 
         $(".addmarker").bind("touchstart click",function() {
             busMap._markerList.add(new google.maps.Marker({position: busMap.getMap().center ,
-                                                            map: busMap.getMap() ,
+                                                            map: busMap.getMap(),
                                                             draggable: true}));
+        });
+
+        $(".addmylocal").bind("touchstart click",function() {
+            if(navigator.geolocation) {
+                // Find My Geolocation
+                navigator.geolocation.getCurrentPosition(function(position){
+                    // My Coords
+                    var mycoords = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    // Find My City with Geocoder
+                    var geocoder = new google.maps.Geocoder(),
+                        latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    geocoder.geocode({'latLng': latlng }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            // Search in Results the names of my City
+                            if (results[0]) {
+                                var cityLongName = results[0].address_components[3].long_name;
+                                var cityShortName = results[0].address_components[3].short_name;
+                                if (cityLongName == 'Fortaleza' || cityShortName == 'Fortaleza') {
+                                    busMap._markerList.add(new google.maps.Marker({ position: mycoords ,
+                                                                    map: busMap.getMap() ,
+                                                                    draggable: true ,
+                                                                    name: 'EU' }));
+                                } else {
+                                    alert("Não foi possível achar sua localização ou você não está em Fortaleza. Tente novamente mais tarde.");
+                                }
+                            }
+                        } else {
+                            alert("Não foi possível achar sua localização. Tente novamente mais tarde.");
+                        }
+                    });
+                    
+
+                }); 
+            } else { 
+                alert("Seu navegador não suporta geolocalização."); 
+            }
         });
 
         $("#searchAddress").bind("submit", function(e){
@@ -58,7 +100,7 @@ app.main = function() {
         if(this.name!=undefined && this.name.length==2) {
             this.name=this.name+" -";
         }
-        return "https://www.google.com/fusiontables/api/query?sql=SELECT geometry FROM 3062503 WHERE name STARTS WITH '"+this.name+"'&jsonCallback=?"
+        return app.params.urlFusionTable+"?sql=SELECT geometry FROM "+app.params.idFusionTable+" WHERE name STARTS WITH '"+this.name+"'&key="+app.params.keyFusionTable+"&callback=?";
     },
     parse : function(response) {
         //Clear map
@@ -69,23 +111,23 @@ app.main = function() {
         var map=this.map;
         
         //Parse response
-        response.table.rows=_.flatten(response.table.rows);
+        response.rows=_.flatten(response.rows);
 
         //if line found
-        if(response.table.rows.length>0) {
+        if(response.rows.length>0) {
 
         //Bounds to get the center of the line
         var bounds = new google.maps.LatLngBounds();
 
         //For each coordinate, create a gmap.Latlng object, and display it
-        response.table.rows=_(response.table.rows).each(function (row){
-            row.coordinates=_(row.coordinates).map(function(coord) {
+        response.rows=_.each(response.rows,function (row){
+            row.geometry.coordinates=_.map(row.geometry.coordinates,function(coord) {
                 var coordinate=new google.maps.LatLng(coord[1],coord[0]);
                 bounds.extend(coordinate);
                 return coordinate;
 
             });
-            lines.push(createPoly(row.coordinates,"midline",setArrows,map));
+            lines.push(createPoly(row.geometry.coordinates,"midline",setArrows,map));
         });
 
         if(this._fitBounds) { 
@@ -193,17 +235,17 @@ var MapAddressFinder = Backbone.Model.extend({
         this.fetchLines();
     },
     url:function() {
-       return "https://www.google.com/fusiontables/api/query?sql=SELECT name FROM 3062503 WHERE ST_INTERSECTS(geometry,CIRCLE(LATLNG("+this.marker.getPosition().lat()+","+this.marker.getPosition().lng()+"),"+this._radius+"))&jsonCallback=?"
+       return app.params.urlFusionTable+"?sql=SELECT name FROM "+app.params.idFusionTable+" WHERE ST_INTERSECTS(geometry,CIRCLE(LATLNG("+this.marker.getPosition().lat()+","+this.marker.getPosition().lng()+"),"+this._radius+"))&key="+app.params.keyFusionTable+"&callback=?";
     },
     parse : function(response) {
-      response.table.rows=_.flatten(response.table.rows);
+      response.rows=_.flatten(response.rows);
       //we remove the last part of the 
-      response.table.rows=_.map(response.table.rows,function(row) {
+      response.rows=_.map(response.rows,function(row) {
           var array=row.split("-");
           return array[0]+"-"+array[1];
       });
       //throw away duplicate values
-      response.table.rows=_.uniq(response.table.rows);
+      response.rows=_.uniq(response.rows);
 
       return response;
     },
@@ -234,8 +276,8 @@ var MarkerList = Backbone.Collection.extend({
                 busMap._lineList.set(this.computeLineList());
                 busMap._lineList.updateViews();
                 //if there are lines corresponding
-                if(listLines.table.rows.length>0) {
-                    busMap.displayLine(listLines.table.rows[0].num)
+                if(listLines.rows.length>0) {
+                    busMap.displayLine(listLines.rows[0].num)
                     //HACK: no more marker TODO: change the logic
                     busMap.linesFound();
                 }
@@ -251,15 +293,13 @@ var MarkerList = Backbone.Collection.extend({
             
         },
         computeLineList : function(){
-            var markers_routes = this.models.map(function(mark){return mark.attributes.table.rows});
+            var markers_routes = this.models.map(function(mark){return mark.attributes.rows});
             var linesIntersection=_.intersection.apply(this,markers_routes);
             var response={
-                table: {
-                        rows: linesIntersection.map(function(row) {
-                          var array=row.split("-");
-                          return { num: array[0],label: array[0]+array[1]};
-                        })
-                },
+                rows: linesIntersection.map(function(row) {
+                  var array=row.split("-");
+                  return { num: array[0],label: array[0]+array[1]};
+                }),
                 _totalLines : linesIntersection.length
             };
             return response;
@@ -305,13 +345,13 @@ var LineList = Backbone.Model.extend({
         this.fetch();
     },
     url:function() {
-        return "https://www.google.com/fusiontables/api/query?sql=SELECT name FROM 3062503&jsonCallback=?"
+        return app.params.urlFusionTable+"?sql=SELECT name FROM "+app.params.idFusionTable+"&key="+app.params.keyFusionTable;
     },
     parse : function(response) {
-        response.table.rows=_.flatten(response.table.rows);
+        response.rows=_.flatten(response.rows);
 
         //if line found
-        if(response.table.rows.length>0) {
+        if(response.rows.length>0) {
 
             busMap.maintenanceMode(false);
         }
@@ -321,7 +361,7 @@ var LineList = Backbone.Model.extend({
 
         var rowTampon="";
         
-        response.table.rows=_.reject(response.table.rows,function(row) {
+        response.rows=_.reject(response.rows,function(row) {
             if(row.split("-")[2]==" Volta" && row.split("-")[1]==rowTampon) {
                 rowTampon=row.split("-")[1];
                 return true;
@@ -332,12 +372,12 @@ var LineList = Backbone.Model.extend({
             }
         });
         
-        response.table.rows=_.map(response.table.rows,function(row) {
+        response.rows=_.map(response.rows,function(row) {
             var array=row.split("-");
             return { num: array[0],label: array[0]+array[1]};
         });
 
-        response._totalLines=response.table.rows.length;
+        response._totalLines=response.rows.length;
 
         return response;
     },
