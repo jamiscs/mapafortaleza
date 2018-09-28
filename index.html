@@ -1,176 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <title>Mapa de Ônibus de Fortaleza</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mapa interativo das linhas de onibus de Fortaleza. Permite a visualização e busca de rotas com um sistema de perquisa de itinerario.">
-    <meta name="author" content="Thibault Durand">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Le Facebook Tags -->
-    <meta property="og:title" content="Mapa de Ônibus de Fortaleza" />
-    <meta property="og:description" content="Mapa interativo das linhas de onibus de Fortaleza. Permite a visualização e busca de rotas com um sistema de perquisa de itinerario." />
-    <meta property="og:image" content="img/icon-facebook.png" />   
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
 
-    <!-- Le styles -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="css/chosen.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="img/favicon.ico">
-    <link rel="apple-touch-icon" href="images/icon-original.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/icon-original.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/icon-original.png">
+
+    <title>Hello, world!</title>
   </head>
-
   <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="">Mapa de Ônibus de Fortaleza</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="main active"><a href="">Mapa</a></li>
-              <li class="about"><a href="#about">Sobre o Aplicativo</a></li>
-            </ul>
-            <div class="nav-bar-right">
-                <a href="https://twitter.com/mapafortaleza" class="twitter-follow-button" data-show-count="true" data-lang="en">Siga @mapafortaleza</a>
-                <div class="fb-like" data-href="https://www.facebook.com/mapafortaleza" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-font="lucida grande"></div>
-            </div>
-          </div><!--/.nav-collapse -->
+    <!-- Navbar  -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav pull-sm-left">
+          <li class="nav-item">
+        <button type="button" id="sidebarCollapse" class="btn btn btn-info">
+          <i class="fas fa-exchange-alt"></i>
+        </button>
+      </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-logo mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Mapa de Ônibus de Fortaleza</a>
+            </li>
+      </ul>
+      <ul class="nav navbar-nav pull-sm-right">
+          <li class="nav-item">
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-align-justify"></i>
+        </button>
+      </li>
+      </ul>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Mapa <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">Sobre</a>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+    </nav>
+    <!-- End of navbar -->
 
-    <div id="main" class="container-fluid page">
-      <div class="row-fluid">
-          <div class="span2" style="color:white;">
-            -
-          </div>
-          <div class="span5">
-            <div id="linelistselect">
-              <h4>Escolha uma linha :</h4>
-              <p>
-              <select data-placeholder="Escolhe uma linha" class="chzn-select">
-                  <option value="">Carregando...</option>
-              </select>
-            </p>
-            </div>
-          </div>
-          <div class="span4">
+    <div class="wrapper">
+
+      <!-- Sidebar -->
+      <nav id="sidebar">
+        <ul class="list-unstyled components">
+          <li>
             <div id="addressSearchForm">
-              <h4>Digite um destino :</h4>
-              <form id="searchAddress" class="form-inline">
-                  <input type="text" id="address">
-                  <input class="btn btn-primary" type="submit" value="Buscar">
+              <form id="searchAddress" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2 ml-sm-2" type="text" id="address" placeholder="Pesquisar endereço" aria-label="Endereço">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
               </form>
             </div>
-          </div>
-          <div class="span1">
-              <div class="loading" class="hidden">
+          </li>
+          <li>
+            <p>
+              <button class="btn btn-secoundary btn-large addmylocal">
+                <i class="fa fa-map-marker"></i>
+                <span>Meu local</span>
+              </button>
+              <button class="btn btn-secoundary btn-large addmarker">
+                <i class="fa fa-map-pin"></i>
+                <span>Adicionar ponto</span>
+            </button>
+          </p>
+          </li>
+          <li>
+            <div class="loading" class="hidden">
+            <div id="listmarkers"></div>
+          </li>
+          <li>
+          <p><div id="linelistselect">
+              <h5>Escolha uma linha: </h5>
+              <select data-placeholder="Escolha uma linha" class="chzn-select">
+                  <option value="">Carregando...</option>
+              </select>
+            </div></p>
+          </li>
 
-              </div>
-          </div>
-      </div>
-      <div class="row-fluid map-hack">
-       <div class="span12 map-hack">
-            <div class="row-fluid map-hack">
-              <div class="span2 sidebar">
-                 <h4>Itinerario:</h4>
-                    <p><button class="btn btn-primary btn-large addmarker">
-                      <i class="icon-map-marker icon-white">
-                      </i>
-                      Adicionar ponto
-                    </button></p>
-                    <p><button class="btn btn-primary btn-large addmylocal">
-                      <i class="icon-map-marker icon-white">
-                      </i>
-                      Minha localização
-                    </button></p>
-                    <div id="listmarkers"></div>
-                    <div id="linelistsidebar" class="lineListSidebar">
-                     <h4>Linhas:</h4> 
-                    </div>
-               </div>
-               <div class="span10 content">
-                  <div class="nolinesfound alert alert-error hidden">
-                    <strong>Nenhuma linha correspondente !</strong> Tenta mover os pontos para tentar encontrar uma rota.
-                  </div>
-                  <div class="maintenance alert alert-heading hidden">
-                    <strong>Manutenção</strong> Atualizando os dados, por favor, aguarde alguns minutos...
-                  </div>
-                  <div class="noaddressfound alert alert-error hidden">
-                    <strong>Endereço não encontrado!</strong> Verifique se ele foi digitado corretamente.
-                  </div>
-                  <div id="map_canvas" class="map"></div>
-               </div>
-             </div>
-       </div>
-       </div>
-       <!-- Hack : Fix issue of chrome on OSX : http://code.google.com/p/chromium/issues/detail?id=113358 -->
-       <img src="https://maps.gstatic.com/mapfiles/openhand_8_8.cur" style="display:none" />
-       <!-- //End hack -->
-       
-    </div> <!-- /container -->
+          <li>
+            <div id="linelistsidebar" class="lineListSidebar">
+          </li>
+        </ul>
+      </nav>
+      <!-- End of sidebar -->
 
-    <div id="about" class="container-fluid page">
-        <div class="row-fluid">
-          <div class="span2" style="color:white;">
-            -
-          </div>
-          <div class="span8">
-            <div class="well">
-            <h4>Sobre o aplicativo</h4>
-            <ul>
-                <li>Os dados são da <a href="http://www.fortaleza.ce.gov.br/etufor/index.php?option=com_content&task=view&id=278">etufor</a></li>
-                <li><em>Os dados não são atualizados automaticamente.</em></li>
-                <li>Fontes do aplicativo no <a href="https://github.com/tdurand/mapafortaleza/">Github</a>
-                </li>
-                <li>
-                  Para contribuir, voce pode mandar uma <strong>pull request</strong> pelo github, tem uma lista das ideas de melhoração <a href="https://github.com/tdurand/mapafortaleza/issues?sort=created&direction=desc&state=open&page=1&milestone=1">aqui</a>. (Pode tambem <a href="https://github.com/tdurand/mapafortaleza/issues/new">sugerar novas ideas</a>)
-                </li>
-                </ul>
-                <h4>Contribuidores</h4>
-                <ul>
-                    <li><a href="https://github.com/mariovalney">Mário Valney</a> (<a href="https://twitter.com/#!/mariovalney">@mariovalney</a>): Adicione um ponto desde a posição geográfica do usuário </li>
-                    <li><a href="https://github.com/regismesquita">Regis David Souza Mesquita</a> (<a href="https://twitter.com/#!/regismesquita">@regismesquita</a>): Primeira versão do sistema de filtragem pela posição </li>
-                    <li><a href="https://github.com/tdurand">Thibault Durand</a> (<a href="https://twitter.com/#!/tibbb">@tibbb</a>): Criador da aplicação </li>
-                </ul>
-                <h4>Siga as atualizações</h4>
-                <ul>
-                  <li><a href="https://twitter.com/mapafortaleza" class="twitter-follow-button" data-show-count="true" data-lang="en">Siga @mapafortaleza</a>
-                  </li>
-                  <li><div class="fb-like" data-href="https://www.facebook.com/mapafortaleza" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-font="lucida grande"></div></li>
-                </ul>
-            </div>
-            <div class="alert alert-info">
-                <p>Pode <strong>deixar messagem</strong>, <strong>fazer sugestão</strong> de funcionalidade ou reportar bugs aqui ou no <a href="http://twitter.com/mapafortaleza">twitter</a></p>
-            </div>
-            <div id="disqus_thread"></div>
-            <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-            </div>
-          <div class="span2">
-          </div>
-      </div>
+
+        <!-- Map -->
+        <main class="container-fluid m-0 p-0">
+          <div id="map-container-4" style="height: 100vh"></div>
+        </main>
+
     </div>
 
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEJGYR_GYh5qLaG0uvlZ12nxyGcfpgtik&libraries=geometry,drawing"></script>
 
@@ -180,13 +125,13 @@
     <script type="text/javascript" src="libs/chosen.jquery.min.js"></script>
     <script type="text/javascript" src="libs/bootstrap.js"></script>
     <script type="text/javascript" src="libs/overthrow.js"></script>
-
+    <script type="text/javascript" src="libs/underscore-min.js" charset="utf-8"></script>
     <script type="text/javascript" src="js/distancewidget.js"></script>
     <script type="text/javascript" src="js/arrows.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <script id="lineListSelect" type="text/html">
-        <h4>Escolhe uma linha ({{_totalLines}}):</h4> 
+        <h4>Escolhe uma linha ({{_totalLines}}):</h4>
         <p><select data-placeholder="Escolhe uma linha" class="chzn-select">
         {{#rows}}
             <option value="{{num}}">{{label}}</option>
@@ -202,11 +147,11 @@
             <tr>
                   <td data-num="{{num}}">{{label}}</td>
             </tr>
-         {{/rows}}                  
+         {{/rows}}
         </table>
         </div>
     </script>
-    
+
     <script id="markerList" type="text/html">
       <ul class="listmarkers">
             {{#models}}
@@ -218,8 +163,17 @@
             {{/models}}
       </ul>
     </script>
-    
+
     <script type="text/javascript">
+      $(document).ready(function () {
+          $('#sidebarCollapse').on('click', function () {
+              $('#sidebar').toggleClass('active');
+          });
+      });
+    </script>
+
+
+    <!-- <script type="text/javascript">
 
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -258,7 +212,6 @@
       js = d.createElement(s); js.id = id;
       js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=488940817813399";
       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
+    }(document, 'script', 'facebook-jssdk'));</script> -->
   </body>
 </html>
