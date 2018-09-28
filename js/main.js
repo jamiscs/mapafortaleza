@@ -11,7 +11,7 @@ app.main = function() {
     var Map = Backbone.Model.extend({
 
     _fitBounds : false,
-    
+
     initialize : function() {
         this.myLatlng = new google.maps.LatLng(-3.71969,-38.52562);
         this.myOptions = {
@@ -19,11 +19,11 @@ app.main = function() {
           center: this.myLatlng,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         }
-        
-        this.map = new google.maps.Map(document.getElementById("map_canvas"), this.myOptions);
+
+        this.map = new google.maps.Map(document.getElementById("map-container-4"), this.myOptions);
         this.setArrows=new ArrowHandler(this.map);
         this.lines=[];
-        
+
         var theMap=this;
 
         this.drawingManager = new google.maps.drawing.DrawingManager({
@@ -80,11 +80,11 @@ app.main = function() {
                             alert("Não foi possível achar sua localização. Tente novamente mais tarde.");
                         }
                     });
-                    
 
-                }); 
-            } else { 
-                alert("Seu navegador não suporta geolocalização."); 
+
+                });
+            } else {
+                alert("Seu navegador não suporta geolocalização.");
             }
         });
 
@@ -109,7 +109,7 @@ app.main = function() {
         var lines=this.lines;
         var setArrows=this.setArrows;
         var map=this.map;
-        
+
         //Parse response
         response.rows=_.flatten(response.rows);
 
@@ -130,7 +130,7 @@ app.main = function() {
             lines.push(createPoly(row.geometry.coordinates,"midline",setArrows,map));
         });
 
-        if(this._fitBounds) { 
+        if(this._fitBounds) {
             this.map.fitBounds(bounds);
         }
 
@@ -153,7 +153,7 @@ app.main = function() {
         _.each(this.lines,function(line) {
             line.setMap(null);
         });
-        
+
         //remove all previous arrows
         _.each(this.setArrows.arrows,function(arrow) {
             arrow.setMap(null);
@@ -223,10 +223,10 @@ var MapAddressFinder = Backbone.Model.extend({
 
         google.maps.event.addListener(currentDistanceWidget.radiusWidget.circle, 'active_changed', function() {
             me._radius=currentDistanceWidget.get('distance')*1000;
-            me.fetchLines(); 
+            me.fetchLines();
         });
 
-        
+
        google.maps.event.addListener(this.marker, 'dragend', function(mouse) {
          me.fetchLines();
 
@@ -239,7 +239,7 @@ var MapAddressFinder = Backbone.Model.extend({
     },
     parse : function(response) {
       response.rows=_.flatten(response.rows);
-      //we remove the last part of the 
+      //we remove the last part of the
       response.rows=_.map(response.rows,function(row) {
           var array=row.split("-");
           return array[0]+"-"+array[1];
@@ -258,12 +258,12 @@ var MapAddressFinder = Backbone.Model.extend({
             },
             error: function() {
               console.log("Error while updating list");
-            }    
-          }); 
+            }
+          });
     }
-     
+
 });
- 
+
 var MarkerList = Backbone.Collection.extend({
         _view : null,
         model: Marker,
@@ -290,7 +290,7 @@ var MarkerList = Backbone.Collection.extend({
                 //HACK: no more marker TODO: change the logic
                 busMap.linesFound();
             }
-            
+
         },
         computeLineList : function(){
             var markers_routes = this.models.map(function(mark){return mark.attributes.rows});
@@ -329,14 +329,14 @@ var MarkerListView = Backbone.View.extend({
         $(this.$el).html(ich.markerList(this.model.toJSON()));
         return this;
     }
-    
+
 });
 
 var LineList = Backbone.Model.extend({
     _viewSelect : null,
     _viewSidebar: null,
     _totalLines : null,
-    
+
     initialize : function() {
         var me=this;
         this.bind("change", function() {
@@ -360,7 +360,7 @@ var LineList = Backbone.Model.extend({
         }
 
         var rowTampon="";
-        
+
         response.rows=_.reject(response.rows,function(row) {
             if(row.split("-")[2]==" Volta" && row.split("-")[1]==rowTampon) {
                 rowTampon=row.split("-")[1];
@@ -371,7 +371,7 @@ var LineList = Backbone.Model.extend({
                 return false;
             }
         });
-        
+
         response.rows=_.map(response.rows,function(row) {
             var array=row.split("-");
             return { num: array[0],label: array[0]+array[1]};
@@ -417,7 +417,7 @@ var LineListSidebarView = Backbone.View.extend({
     el : $("#linelistsidebar"),
     render: function() {
         $(this.$el).html(ich.lineListSidebar(this.model.toJSON()));
-        $("#linelistsidebar td").bind("click touchstart",function (e) { 
+        $("#linelistsidebar td").bind("click touchstart",function (e) {
              var num=$(this).attr("data-num");
              busMap._map._fitBounds=true;
              busMap.displayLine(num);
@@ -432,13 +432,13 @@ var LineListSidebarView = Backbone.View.extend({
 });
 
 var BusMap = Backbone.Router.extend({
-    
+
     routes : {
         "":             "index",
         "line/:num":    "displayLine",
         "about":        "about",
     },
-    
+
     initialize : function() {
         this.loading();
         this._lineList=new LineList();
@@ -447,11 +447,11 @@ var BusMap = Backbone.Router.extend({
         this._mapAddressFinder = new MapAddressFinder();
         this.ready();
     },
-    
+
     index : function() {
         this.switchToPage("main");
     },
-    
+
     getMap : function(){
        return this._map.getMap();
     },
@@ -518,4 +518,3 @@ return {
 }
 
 }();
-
