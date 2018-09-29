@@ -32,10 +32,6 @@ a:focus {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-brand {
-	float:none;
-}
-
 .navbar-btn {
     box-shadow: none;
     outline: none !important;
@@ -161,7 +157,7 @@ a.article:hover {
 
 @media (max-width: 768px) {
     #sidebar {
-        margin-left: -250px;
+        margin-left: -350px;
     }
     #sidebar.active {
         margin-left: 0;
@@ -169,4 +165,22 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
+}
+
+.chzn-select {
+  width: 100%;
+}
+
+.table.listlines {
+    cursor:pointer;
+}
+
+.table.listlines tbody tr.selected td {
+  background-color: #1684C2;
+  color:white;
+  outline: 0;
+}
+
+.table.listlines tbody tr:hover {
+  background-color: #f5f5f5;
 }

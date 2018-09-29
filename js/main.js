@@ -339,6 +339,7 @@ var LineList = Backbone.Model.extend({
 
     initialize : function() {
         var me=this;
+        
         this.bind("change", function() {
             me.updateViews();
         });

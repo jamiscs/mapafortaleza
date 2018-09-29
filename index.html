@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-
+    <link rel="stylesheet" href="css/chosen.css">
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
 
@@ -24,7 +24,7 @@
         <ul class="nav navbar-nav pull-sm-left">
           <li class="nav-item">
         <button type="button" id="sidebarCollapse" class="btn btn btn-info">
-          <i class="fas fa-exchange-alt"></i>
+          <i class="fa fa-search"></i>
         </button>
       </li>
       </ul>
@@ -86,12 +86,12 @@
             <div id="listmarkers"></div>
           </li>
           <li>
-          <p><div id="linelistselect">
-              <h5>Escolha uma linha: </h5>
-              <select data-placeholder="Escolha uma linha" class="chzn-select">
+          <div id="linelistselect">
+              <h6>Escolha uma linha: </h6>
+                <select class="chzn-select" data-placeholder="Escolha uma linha">
                   <option value="">Carregando...</option>
-              </select>
-            </div></p>
+                </select>
+            </div>
           </li>
 
           <li>
@@ -101,10 +101,9 @@
       </nav>
       <!-- End of sidebar -->
 
-
         <!-- Map -->
         <main class="container-fluid m-0 p-0">
-          <div id="map-container-4" style="height: 100vh"></div>
+          <div id="map-container-4" class="map" style="height: 100vh"></div>
         </main>
 
     </div>
@@ -131,8 +130,8 @@
     <script type="text/javascript" src="js/main.js"></script>
 
     <script id="lineListSelect" type="text/html">
-        <h4>Escolhe uma linha ({{_totalLines}}):</h4>
-        <p><select data-placeholder="Escolhe uma linha" class="chzn-select">
+        <h6>Escolha uma linha ({{_totalLines}}):</h6>
+        <p><select class="chzn-select" data-placeholder="Escolhe uma linha">
         {{#rows}}
             <option value="{{num}}">{{label}}</option>
         {{/rows}}
@@ -140,9 +139,9 @@
     </script>
 
     <script id="lineListSidebar" type="text/html">
-        <h4>Linhas ({{_totalLines}}): </h4>
+        <h6>Linhas ({{_totalLines}}): </h6>
         <div class="lineListSidebarContent">
-        <table class="table table-striped table-bordered table-condensed listlines">
+        <table class="table table-striped table-sm listlines">
          {{#rows}}
             <tr>
                   <td data-num="{{num}}">{{label}}</td>
@@ -153,15 +152,13 @@
     </script>
 
     <script id="markerList" type="text/html">
-      <ul class="listmarkers">
-            {{#models}}
-                <li><div class="btn-group">
-                        <a class="btn" href="#">{{name}}</a>
-                    <!-- TODO Refactoring -->
-                    <a class="btn btn-remove-marker" href="#" data-index="{{index}}" onClick="app.main.map._map._fitBounds=true;app.main.map._markerList.removeByIndex({{index}});"><i class="icon-remove"></i></a>
-                </div></li>
-            {{/models}}
-      </ul>
+      {{#models}}
+        <div class="btn-group">
+          <a class="btn" href="#">{{name}}</a>
+          <!-- TODO Refactoring -->
+          <a class="btn btn-remove-marker" href="#" data-index="{{index}}" onClick="app.main.map._map._fitBounds=true;app.main.map._markerList.removeByIndex({{index}});"><i class="fas fa-times"></i></a>
+        </div>
+      {{/models}}
     </script>
 
     <script type="text/javascript">
