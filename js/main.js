@@ -339,7 +339,7 @@ var LineList = Backbone.Model.extend({
 
     initialize : function() {
         var me=this;
-        
+
         this.bind("change", function() {
             me.updateViews();
         });
@@ -388,6 +388,9 @@ var LineList = Backbone.Model.extend({
         busMap._map.clear();
     },
     updateViews : function() {
+
+        ich.grabTemplates();
+        
         this._viewSelect=new LineListSelectView({model : this});
         this._viewSelect.render();
         this._viewSidebar=new LineListSidebarView({model:this});
@@ -410,7 +413,7 @@ var LineListSelectView = Backbone.View.extend({
     },
     setSelected : function(numLine) {
         $(".chzn-select").val(numLine+' ');
-        $(".chzn-select").trigger("liszt:updated");
+        $(".chzn-select").trigger("chosen:updated");
     },
 });
 
